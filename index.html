@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's Your Metabolism Type? | Coach Caro Fitness</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #FAF7F2;
+    color: #222;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .card {
+    background: #fff;
+    max-width: 540px;
+    width: 100%;
+    border-radius: 18px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+    padding: 40px 32px;
+  }
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.25;
+    margin-bottom: 12px;
+  }
+  h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: 22px;
+    line-height: 1.3;
+    margin-bottom: 18px;
+  }
+  p { line-height: 1.6; color: #444; margin-bottom: 16px; }
+  .screen { display: none; }
+  .screen.active { display: block; }
+  .progress-wrap {
+    height: 6px;
+    background: #EFE9E0;
+    border-radius: 4px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: #C97C5D;
+    width: 0%;
+    transition: width 0.3s ease;
+  }
+  .q-count {
+    font-size: 13px;
+    color: #999;
+    margin-bottom: 6px;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+  }
+  .option {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #FAF7F2;
+    border: 1.5px solid #EFE9E0;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .option:hover { border-color: #C97C5D; background: #fff; }
+  .btn {
+    display: inline-block;
+    background: #222;
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 14px 28px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+  }
+  .btn:hover { background: #000; }
+  input[type="text"], input[type="email"], input[type="tel"] {
+    width: 100%;
+    border: 1.5px solid #EFE9E0;
+    border-radius: 10px;
+    padding: 13px 14px;
+    font-size: 15px;
+    margin-bottom: 12px;
+    font-family: 'Inter', sans-serif;
+    background: #FAF7F2;
+  }
+  input:focus { outline: none; border-color: #C97C5D; }
+  .result-label {
+    font-size: 13px;
+    color: #C97C5D;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .fine-print { font-size: 12px; color: #aaa; margin-top: 14px; text-align: center; }
+  .cta-box {
+    background: #FAF7F2;
+    border-radius: 12px;
+    padding: 18px;
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+
+  <!-- INTRO -->
+  <div class="screen active" id="screen-intro">
+    <h1>What's Your Metabolism Type?</h1>
+    <p>Six questions. No calorie math, no guessing. Just a straight answer on why your metabolism feels stuck — and what actually moves it.</p>
+    <button class="btn" onclick="goTo('q1')">Start the Quiz</button>
+  </div>
+
+  <!-- QUESTIONS -->
+  <div class="screen" id="screen-quiz">
+    <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+    <div class="q-count" id="qCount">Question 1 of 6</div>
+    <h2 id="qText"></h2>
+    <div id="qOptions"></div>
+  </div>
+
+  <!-- LEAD CAPTURE -->
+  <div class="screen" id="screen-lead">
+    <h2>Almost done.</h2>
+    <p>Enter your name and email and your result will show up right below.</p>
+    <form id="leadForm">
+      <input type="text" id="leadName" placeholder="First name" required>
+      <input type="email" id="leadEmail" placeholder="Email address" required>
+      <input type="tel" id="leadPhone" placeholder="Phone number" required>
+      <input type="hidden" id="leadType" name="metabolism_type">
+      <button class="btn" type="submit">Show Me My Result</button>
+    </form>
+  </div>
+
+  <!-- RESULT -->
+  <div class="screen" id="screen-result">
+    <div class="result-label">Your Metabolism Type</div>
+    <h1 id="resultTitle"></h1>
+    <p id="resultBody"></p>
+    <div class="cta-box">
+      <p style="margin-bottom:10px; font-weight:500; color:#222;">Want a plan built around this instead of a generic calorie target?</p>
+      <p style="margin-bottom:14px;">Here's exactly what that looks like.</p>
+      <a href="https://coachcarofitness.com/info-2100-8170" target="_blank" class="btn" style="display:block; text-align:center; text-decoration:none; box-sizing:border-box;">Learn How We Can Help You</a>
+    </div>
+  </div>
+
+  <div class="fine-print">Coach Caro Fitness · StrongHer Method</div>
+</div>
+
+<script>
+const questions = [
+  {
+    text: "How would you describe your eating pattern most weeks?",
+    options: [
+      { label: "Pretty consistent — similar times and amounts daily", type: "A" },
+      { label: "I skip meals when busy, then eat whatever's around later", type: "B" },
+      { label: "Very little most of the day, then a bigger dinner", type: "C" },
+      { label: "Strict Monday–Friday, then I let go on weekends", type: "D" }
+    ]
+  },
+  {
+    text: "How's your energy by 3pm on a normal day?",
+    options: [
+      { label: "Stable, no major crashes", type: "A" },
+      { label: "Wired but exhausted — running on stress", type: "B" },
+      { label: "Dragging, low energy most of the day", type: "C" },
+      { label: "Depends entirely on the day", type: "D" }
+    ]
+  },
+  {
+    text: "How do you sleep?",
+    options: [
+      { label: "Solid 7+ hours most nights", type: "A" },
+      { label: "Fall asleep fine, wake up wired around 3am", type: "B" },
+      { label: "Tired, but can't get quality sleep", type: "C" },
+      { label: "Inconsistent, depends how the week went", type: "D" }
+    ]
+  },
+  {
+    text: "What's your relationship with cravings?",
+    options: [
+      { label: "Manageable, occasional sweet tooth", type: "A" },
+      { label: "Stress snacking, especially in the evening", type: "B" },
+      { label: "Intense cravings, especially carbs and sugar", type: "C" },
+      { label: "Fine during the week, gone by Saturday", type: "D" }
+    ]
+  },
+  {
+    text: "How many diets or eating overhauls have you tried in the past 5 years?",
+    options: [
+      { label: "One or two, nothing extreme", type: "A" },
+      { label: "A few, usually abandoned when life got busy", type: "B" },
+      { label: "Too many to count, mostly restrictive ones", type: "C" },
+      { label: "I do well for a few weeks, then fall off completely", type: "D" }
+    ]
+  },
+  {
+    text: "How do you currently train?",
+    options: [
+      { label: "Consistent strength training, a few times a week", type: "A" },
+      { label: "I want to, but I'm too tapped out most days", type: "B" },
+      { label: "Mostly cardio, trying to 'earn' food", type: "C" },
+      { label: "Depends on motivation — all or nothing", type: "D" }
+    ]
+  }
+];
+
+const results = {
+  A: {
+    title: "The Steady Burner",
+    body: "Your habits are mostly working. You're not broken — you're under-optimized in a few specific spots. With the right strength and recovery plan, you'd see real change in 8 to 12 weeks, not because you're starting over, but because you're finally targeting what's actually missing."
+  },
+  B: {
+    title: "The Stress-Stalled",
+    body: "Your metabolism isn't damaged. It's been running on stress hormones for too long. Cortisol can hold onto fat and blunt progress no matter how clean your nutrition is. Until your nervous system gets an actual break, no meal plan is going to outwork that."
+  },
+  C: {
+    title: "The Under-Fueled",
+    body: "You're eating less than your body needs to function, let alone build muscle or lose fat sustainably. Your metabolism has adapted to scarcity. The fix isn't eating less — it's eating enough, consistently, until your body trusts that food isn't going anywhere."
+  },
+  D: {
+    title: "The Inconsistent Fueler",
+    body: "Your body never knows what to expect from you, so it stays in a holding pattern. Weekday restriction and weekend free-for-alls cancel each other out. Consistency, not intensity, is the actual lever here — and it's the one thing most plans never address."
+  }
+};
+
+let current = 0;
+const scores = { A: 0, B: 0, C: 0, D: 0 };
+
+function goTo(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  if (screen === 'q1') {
+    document.getElementById('screen-quiz').classList.add('active');
+    renderQuestion();
+  } else if (screen === 'lead') {
+    document.getElementById('screen-lead').classList.add('active');
+  } else if (screen === 'result') {
+    document.getElementById('screen-result').classList.add('active');
+  }
+}
+
+function renderQuestion() {
+  const q = questions[current];
+  document.getElementById('qCount').textContent = `Question ${current + 1} of ${questions.length}`;
+  document.getElementById('progressBar').style.width = `${(current / questions.length) * 100}%`;
+  document.getElementById('qText').textContent = q.text;
+  const optsDiv = document.getElementById('qOptions');
+  optsDiv.innerHTML = '';
+  q.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'option';
+    btn.textContent = opt.label;
+    btn.onclick = () => selectOption(opt.type);
+    optsDiv.appendChild(btn);
+  });
+}
+
+function selectOption(type) {
+  scores[type]++;
+  current++;
+  if (current < questions.length) {
+    renderQuestion();
+  } else {
+    document.getElementById('progressBar').style.width = '100%';
+    goTo('lead');
+  }
+}
+
+function getResultType() {
+  let top = 'A';
+  let max = -1;
+  for (const key in scores) {
+    if (scores[key] > max) {
+      max = scores[key];
+      top = key;
+    }
+  }
+  return top;
+}
+
+document.getElementById('leadForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const type = getResultType();
+  const name = document.getElementById('leadName').value;
+  const email = document.getElementById('leadEmail').value;
+  const phone = document.getElementById('leadPhone').value;
+  document.getElementById('leadType').value = type;
+
+  // Formspree submission
+  fetch('https://formspree.io/f/xkoaykyy', {
+    method: 'POST',
+    headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: name, email: email, phone: phone, metabolism_type: results[type].title })
+  }).catch(() => {});
+
+  document.getElementById('resultTitle').textContent = results[type].title;
+  document.getElementById('resultBody').textContent = results[type].body;
+  goTo('result');
+});
+</script>
+
+</body>
+</html>
